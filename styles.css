@@ -21,7 +21,7 @@
     place-items: center ;
 }
 
-.game {
+.gameBoard {
     background-color: yellow;
     height: 360px;
     width: 360px;
@@ -31,6 +31,10 @@
 
 .gameInput {
     border: solid black 1px;
+    font-size: 100px;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
 }
 
 
