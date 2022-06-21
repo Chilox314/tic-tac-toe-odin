@@ -10,16 +10,16 @@ const dummyO = player("o","playerO");
 const gameBoard = (() => {
     let currentGameBoard = ["e","e","e","e","e","e","e","e","e"]; //[tl,tm,tr,ml,mm,mr,bl,bm,br] e=empty,x=x,o=o
 
-    let winningPatterns =  [
-                            [0,1,2],
-                            [3,4,5],
-                            [6,7,8],
-                            [0,3,6],
-                            [1,4,7],
-                            [2,5,8],
-                            [0,4,8],
-                            [2,4,6]
-                        ];
+    let winningPatterns =  {
+                            1:[0,1,2],
+                            2:[3,4,5],
+                            3:[6,7,8],
+                            4:[0,3,6],
+                            5:[1,4,7],
+                            6:[2,5,8],
+                            7:[0,4,8],
+                            8:[2,4,6]
+                            };                    
 
     const logGame = () => {
         console.log(currentGameBoard);
@@ -36,7 +36,16 @@ const gameBoard = (() => {
     const resetIt = () => {currentGameBoard = ["e","e","e","e","e","e","e","e","e"]};
 
     const checkForWin = () => {
-        
+        for (const x in winningPatterns) { //loops through possible winning patterns and checks currentGameBoard for them
+            if (    
+                currentGameBoard[winningPatterns[x][0]] === currentGameBoard[winningPatterns[x][1]] && 
+                currentGameBoard[winningPatterns[x][0]] === currentGameBoard[winningPatterns[x][2]] &&
+                currentGameBoard[winningPatterns[x][0]] !== "e"
+                ) {
+                console.log("a"); //logic for winner
+                break;
+            };
+        };
     };
 
     return {
