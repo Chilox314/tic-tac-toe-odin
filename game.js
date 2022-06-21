@@ -36,11 +36,7 @@ const gameBoard = (() => {
     const resetIt = () => {currentGameBoard = ["e","e","e","e","e","e","e","e","e"]};
 
     const checkForWin = () => {
-        for (const i of winningPatterns) {
-            if (currentGameBoard[i[0]] === currentGameBoard[i[1]] === currentGameBoard[i[2]]) {
-                console.log(i);
-            };
-        };
+        
     };
 
     return {
