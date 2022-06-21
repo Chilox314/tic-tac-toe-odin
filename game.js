@@ -42,8 +42,12 @@ const gameBoard = (() => {
                 currentGameBoard[winningPatterns[x][0]] === currentGameBoard[winningPatterns[x][2]] &&
                 currentGameBoard[winningPatterns[x][0]] !== "e"
                 ) {
-                console.log("a"); //logic for winner
-                break;
+                    if (currentGameBoard[winningPatterns[x][0]] === "x") {
+                        game.end("x")
+                    } else if (currentGameBoard[winningPatterns[x][0]] === "o") {
+                        game.end("o")
+                    }
+                    break;
             };
         };
     };
@@ -62,34 +66,49 @@ const game = (() => {
 
     let inputField = document.querySelectorAll(".gameInput");
 
-    inputField.forEach((field, index) => {
+    const start = () => {
+        inputField.forEach((field, index) => {
 
-        field.addEventListener("click", () => {
-            //checks who's turn it is and if the field is taken
-            if (currentTurn === "x" && field.textContent === "") {
-                gameBoard.placeX(index);
-                field.textContent = "x";
-                currentTurn = "o";
-                console.log("placed x");
-                gameBoard.checkForWin();
-            }
-            else if (currentTurn === "o" && field.textContent === "") {
-                gameBoard.placeO(index);
-                field.textContent = "o";
-                currentTurn = "x";
-                console.log("placed o");
-                gameBoard.checkForWin();
-            };
+            field.addEventListener("click", function eventListener() {
+                //checks who's turn it is and if the field is taken
+                if (currentTurn === "x" && field.textContent === "") {
+                    gameBoard.placeX(index);
+                    field.textContent = "x";
+                    currentTurn = "o";
+                    console.log("placed x");
+                    gameBoard.checkForWin();
+                }
+                else if (currentTurn === "o" && field.textContent === "") {
+                    gameBoard.placeO(index);
+                    field.textContent = "o";
+                    currentTurn = "x";
+                    console.log("placed o");
+                    gameBoard.checkForWin();
+                };
+            });
+
         });
+    };
 
-    });
+    const end = (winningMarker) => {
+        console.log(`${winningMarker} has won!`);
+    };
 
     const reset = () => {
         inputField.forEach((field) => field.textContent = "");
         currentTurn = "x";
         gameBoard.resetIt();
     };
+
+    //buttons
+    const resetBtn = document.getElementById("resetBtn");
+    resetBtn.addEventListener("click", () => reset());
+
     return {
         reset,
+        start,
+        end,
     }
 })();
+
+game.start();
