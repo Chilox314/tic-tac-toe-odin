@@ -1,5 +1,5 @@
 To-Do:
-    - Tie Logic
+    - work on tie logic
     - UI/Design
     - Player Selection w/names
     - show result on screen

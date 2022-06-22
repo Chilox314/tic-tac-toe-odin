@@ -11,13 +11,13 @@ const gameBoard = (() => {
     let currentGameBoard = ["e","e","e","e","e","e","e","e","e"]; //[tl,tm,tr,ml,mm,mr,bl,bm,br] e=empty,x=x,o=o
 
     let winningPatterns =  {
-                            1:[0,1,2],
+                            1:[0,1,2],  //horizontal wins
                             2:[3,4,5],
                             3:[6,7,8],
-                            4:[0,3,6],
+                            4:[0,3,6],  //vertical wins
                             5:[1,4,7],
                             6:[2,5,8],
-                            7:[0,4,8],
+                            7:[0,4,8],  //diagonal wins
                             8:[2,4,6]
                             };                    
 
@@ -43,12 +43,35 @@ const gameBoard = (() => {
                 currentGameBoard[winningPatterns[x][0]] !== "e"
                 ) {
                     if (currentGameBoard[winningPatterns[x][0]] === "x") {
-                        game.end("x")
+                        game.end("x", true);
                     } else if (currentGameBoard[winningPatterns[x][0]] === "o") {
-                        game.end("o")
+                        game.end("o", true);
                     }
                     break;
+            } else {
+                if(checkForTie()) {
+                    game.end("e", false);
+                    break;
+                };
             };
+        };
+    };
+
+    const checkForTie = () => {
+        if (
+            currentGameBoard[0] !== "e" &&
+            currentGameBoard[1] !== "e" &&
+            currentGameBoard[2] !== "e" &&
+            currentGameBoard[3] !== "e" &&
+            currentGameBoard[4] !== "e" &&
+            currentGameBoard[5] !== "e" &&
+            currentGameBoard[6] !== "e" &&
+            currentGameBoard[7] !== "e" &&
+            currentGameBoard[8] !== "e"
+        ) {
+            return true;
+        } else {
+            return false;
         };
     };
 
@@ -90,8 +113,16 @@ const game = (() => {
         });
     };
 
-    const end = (winningMarker) => {
-        console.log(`${winningMarker} has won!`);
+    const end = (winningMarker,isGameWon) => {
+        if (isGameWon) {
+            inputField.forEach((field) => {
+                field.removeEventListener("click", () => eventListener() );
+            });
+            console.log(`${winningMarker} has won!`);
+        }
+        else {
+            console.log("It's a tie");
+        }
     };
 
     const reset = () => {
