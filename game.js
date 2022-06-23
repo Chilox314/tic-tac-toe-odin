@@ -87,9 +87,11 @@ const gameBoard = (() => {
 const game = (() => {
     let currentTurn = "x";
 
-    let inputField = document.querySelectorAll(".gameInput");
+    const gameBoardDOM = document.getElementById("gameBoard");
 
     const start = () => {
+        let inputField = document.querySelectorAll(".gameInput");
+
         inputField.forEach((field, index) => {
 
             field.addEventListener("click", function eventListener() {
@@ -115,9 +117,7 @@ const game = (() => {
 
     const end = (winningMarker,isGameWon) => {
         if (isGameWon) {
-            inputField.forEach((field) => {
-                field.removeEventListener("click", () => eventListener() );
-            });
+            gameBoardDOM.replaceWith(gameBoardDOM.cloneNode(true));
             console.log(`${winningMarker} has won!`);
         }
         else {
@@ -126,9 +126,12 @@ const game = (() => {
     };
 
     const reset = () => {
+        let inputField = document.querySelectorAll(".gameInput");
+        console.log("reset");
         inputField.forEach((field) => field.textContent = "");
         currentTurn = "x";
         gameBoard.resetIt();
+        game.start();
     };
 
     //buttons
