@@ -131,7 +131,7 @@ const game = (() => {
         inputField.forEach((field) => field.textContent = "");
         currentTurn = "x";
         gameBoard.resetIt();
-        game.start();
+        game.start()    
     };
 
     //buttons
