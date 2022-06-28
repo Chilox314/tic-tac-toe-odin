@@ -18,10 +18,6 @@ const gameBoard = (() => {
                             8:[2,4,6]
                             };                    
 
-    const logGame = () => {
-        console.log(currentGameBoard);
-    };
-
     const placeX = (pos) => {
         currentGameBoard[pos] = "x";
     };
@@ -32,7 +28,7 @@ const gameBoard = (() => {
 
     const resetGameBoard = () => {currentGameBoard = ["e","e","e","e","e","e","e","e","e"]};
 
-    const checkForWin = () => {
+    const checkForWin = () => { //checks if one player won the game or the game ties and triggers game.end if successful
         let isGameWon = false;
 
         for (const x in winningPatterns) { //loops through possible winning patterns and checks currentGameBoard for them
@@ -56,7 +52,7 @@ const gameBoard = (() => {
         };
     };
 
-    const checkForTie = () => {
+    const checkForTie = () => { //checks the game for a tie position
         if (
             currentGameBoard[0] !== "e" &&
             currentGameBoard[1] !== "e" &&
@@ -77,7 +73,6 @@ const gameBoard = (() => {
     return {
         placeX,
         placeO,
-        logGame,
         resetGameBoard,
         checkForWin,
     };
@@ -88,28 +83,29 @@ const game = (() => {
     let playerX;
     let playerO;
     
-    const start = () => {
+    const start = () => { //starts the game, heart of the code 
         initPlayerNames();
         reset();
 
         let inputField = document.querySelectorAll(".gameInput");
         
+        //adds event listeners to each field
         inputField.forEach((field, index) => {
             
             field.addEventListener("click", function eventListener() {
-                //checks who's turn it is and if the field is taken
+                //checks who's turn it is and if the field is taken, if not places the current's player's marker
                 if (currentTurn === "x" && field.textContent === "") {
                     gameBoard.placeX(index);
                     field.textContent = "x";
                     currentTurn = "o";
-                    console.log("placed x");
+                    // console.log("placed x");
                     gameBoard.checkForWin();
                 }
                 else if (currentTurn === "o" && field.textContent === "") {
                     gameBoard.placeO(index);
                     field.textContent = "o";
                     currentTurn = "x";
-                    console.log("placed o");
+                    // console.log("placed o");
                     gameBoard.checkForWin();
                 };
             });
@@ -117,14 +113,14 @@ const game = (() => {
         });
     };
     
-    const end = (winningMarker,isGameWon) => {
+    const end = (winningMarker,isGameWon) => {  //ends game, initiates output of result
         nameInputO.disabled = false;
         nameInputX.disabled = false;
 
         if (isGameWon) {
             const gameBoardDOM = document.getElementById("gameBoard");
 
-            gameBoardDOM.replaceWith(gameBoardDOM.cloneNode(true));
+            gameBoardDOM.replaceWith(gameBoardDOM.cloneNode(true)); //deactivates the gameboard
 
             if (playerX.marker === winningMarker) {
                 winnerOutput.textContent = `${playerX.name} has won with X`;
@@ -138,27 +134,28 @@ const game = (() => {
         }
     };
 
-    const reset = () => {
+    const reset = () => { //resets game
+
         let inputField = document.querySelectorAll(".gameInput");
-        console.log("reset");
-        inputField.forEach((field) => {field.replaceWith(field.cloneNode(false))});
+        // console.log("reset");
+        inputField.forEach((field) => field.textContent = "");
         currentTurn = "x";
         gameBoard.resetGameBoard();
         winnerOutput.textContent = "";
     };
 
-    const initPlayerNames = () => {
+    const initPlayerNames = () => { //saves playernames
         let playerXName;
         let playerOName;
 
         if(nameInputX.value === ""){
-            playerXName = "PlayerX"
+            playerXName = "PlayerX" //backup for empty playername inputs
         } else {
             playerXName = nameInputX.value;
         };
 
         if(nameInputO.value === "") {
-            playerOName = "Player O";
+            playerOName = "Player O"; //backup for empty playername inputs
         } else {
             playerOName = nameInputO.value;
         };
@@ -168,7 +165,7 @@ const game = (() => {
 
         console.log(playerO, playerX);
 
-        nameInputX.disabled = true;
+        nameInputX.disabled = true; //disables input for the time of the game
         nameInputO.disabled = true;
     };
 
