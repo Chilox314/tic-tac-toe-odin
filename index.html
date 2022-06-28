@@ -10,25 +10,48 @@
 <body>
     <div class="bodyWrapper">
 
-        <div class="header"></div>
+        <div class="contentWrapper">
 
-        <div class="content">
-
-            <div class="gameBoard" id="gameBoard">
-
-                <div class="gameInput" id="tl"></div>   <!--tl = top-left -->
-                <div class="gameInput" id="tm"></div>   <!--tm = top-mid -->
-                <div class="gameInput" id="tr"></div>   <!-- tr = top-right -->
-                <div class="gameInput" id="ml"></div>
-                <div class="gameInput" id="mm"></div>
-                <div class="gameInput" id="mr"></div>
-                <div class="gameInput" id="bl"></div>
-                <div class="gameInput" id="bm"></div>
-                <div class="gameInput" id="br"></div>
+            <div class="header">
 
             </div>
 
-            <button id="resetBtn">Reset</button>
+            <div class="content">
+
+                <div class="playerSel" id="playerXSel">
+                    Player X
+                    <label for="playerXName">Enter your Name:</label>
+                    <input type="text" name="playerX_name" id="playerXName" placeholder="name">
+                </div>
+
+                <div class="gameBoard" id="gameBoard">
+
+                    <div class="gameInput" id="tl"></div>   <!--tl = top-left -->
+                    <div class="gameInput" id="tm"></div>   <!--tm = top-mid -->
+                    <div class="gameInput" id="tr"></div>   <!-- tr = top-right -->
+                    <div class="gameInput" id="ml"></div>
+                    <div class="gameInput" id="mm"></div>
+                    <div class="gameInput" id="mr"></div>
+                    <div class="gameInput" id="bl"></div>
+                    <div class="gameInput" id="bm"></div>
+                    <div class="gameInput" id="br"></div>
+
+                </div>
+
+                <div class="playerSel" id="playerOSel">
+                    Player O
+                    <label for="playerOName">Enter your Name:</label>
+                    <input type="text" name="playerO_name" id="playerOName" placeholder="name">
+                </div>
+
+                <div class="buttons">
+                    <button id="startBtn">Start</button>
+                    <button id="resetBtn">Reset</button>
+                </div>
+
+                <div class="winner" id="winnerOutput"></div>
+
+            </div>
 
         </div>
 

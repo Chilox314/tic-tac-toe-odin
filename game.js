@@ -4,9 +4,6 @@ const player = (mark, playerName) => {
     return {name, marker};
 };
 
-const dummyX = player("x","playerX");
-const dummyO = player("o","playerO");
-
 const gameBoard = (() => {
     let currentGameBoard = ["e","e","e","e","e","e","e","e","e"]; //[tl,tm,tr,ml,mm,mr,bl,bm,br] e=empty,x=x,o=o
 
@@ -33,9 +30,11 @@ const gameBoard = (() => {
         currentGameBoard[pos] = "o";
     };
 
-    const resetIt = () => {currentGameBoard = ["e","e","e","e","e","e","e","e","e"]};
+    const resetGameBoard = () => {currentGameBoard = ["e","e","e","e","e","e","e","e","e"]};
 
     const checkForWin = () => {
+        let isGameWon = false;
+
         for (const x in winningPatterns) { //loops through possible winning patterns and checks currentGameBoard for them
             if (    
                 currentGameBoard[winningPatterns[x][0]] === currentGameBoard[winningPatterns[x][1]] && 
@@ -43,17 +42,17 @@ const gameBoard = (() => {
                 currentGameBoard[winningPatterns[x][0]] !== "e"
                 ) {
                     if (currentGameBoard[winningPatterns[x][0]] === "x") {
+                        isGameWon = true;
                         game.end("x", true);
                     } else if (currentGameBoard[winningPatterns[x][0]] === "o") {
+                        isGameWon = true;
                         game.end("o", true);
                     }
                     break;
-            } else {
-                if(checkForTie()) {
-                    game.end("e", false);
-                    break;
-                };
+                }
             };
+        if (!isGameWon && checkForTie()) {
+            game.end("e", false);
         };
     };
 
@@ -79,21 +78,24 @@ const gameBoard = (() => {
         placeX,
         placeO,
         logGame,
-        resetIt,
+        resetGameBoard,
         checkForWin,
     };
 })();
 
 const game = (() => {
     let currentTurn = "x";
-
-    const gameBoardDOM = document.getElementById("gameBoard");
-
+    let playerX;
+    let playerO;
+    
     const start = () => {
+        initPlayerNames();
+        reset();
+
         let inputField = document.querySelectorAll(".gameInput");
-
+        
         inputField.forEach((field, index) => {
-
+            
             field.addEventListener("click", function eventListener() {
                 //checks who's turn it is and if the field is taken
                 if (currentTurn === "x" && field.textContent === "") {
@@ -111,38 +113,78 @@ const game = (() => {
                     gameBoard.checkForWin();
                 };
             });
-
+            
         });
     };
-
+    
     const end = (winningMarker,isGameWon) => {
+        nameInputO.disabled = false;
+        nameInputX.disabled = false;
+
         if (isGameWon) {
+            const gameBoardDOM = document.getElementById("gameBoard");
+
             gameBoardDOM.replaceWith(gameBoardDOM.cloneNode(true));
-            console.log(`${winningMarker} has won!`);
+
+            if (playerX.marker === winningMarker) {
+                winnerOutput.textContent = `${playerX.name} has won with X`;
+            }
+            else if (playerO.marker === winningMarker) {
+                winnerOutput.textContent = `${playerO.name} has won with O`;
+            };
         }
         else {
-            console.log("It's a tie");
+            winnerOutput.textContent = "It's a tie! Try again"
         }
     };
 
     const reset = () => {
         let inputField = document.querySelectorAll(".gameInput");
         console.log("reset");
-        inputField.forEach((field) => field.textContent = "");
+        inputField.forEach((field) => {field.replaceWith(field.cloneNode(false))});
         currentTurn = "x";
-        gameBoard.resetIt();
-        game.start()    
+        gameBoard.resetGameBoard();
+        winnerOutput.textContent = "";
     };
 
-    //buttons
+    const initPlayerNames = () => {
+        let playerXName;
+        let playerOName;
+
+        if(nameInputX.value === ""){
+            playerXName = "PlayerX"
+        } else {
+            playerXName = nameInputX.value;
+        };
+
+        if(nameInputO.value === "") {
+            playerOName = "Player O";
+        } else {
+            playerOName = nameInputO.value;
+        };
+
+        playerO = player("o", playerOName);
+        playerX = player("x", playerXName);
+
+        console.log(playerO, playerX);
+
+        nameInputX.disabled = true;
+        nameInputO.disabled = true;
+    };
+
+    //buttons, output and inputs
     const resetBtn = document.getElementById("resetBtn");
-    resetBtn.addEventListener("click", () => reset());
+    resetBtn.addEventListener("click", () => start());
+
+    const startBtn = document.getElementById("startBtn");
+    startBtn.addEventListener("click", () => start());
+
+    const nameInputX = document.getElementById("playerXName");
+    const nameInputO = document.getElementById("playerOName");
+
+    const winnerOutput = document.getElementById("winnerOutput");
 
     return {
-        reset,
-        start,
-        end,
+        end
     }
 })();
-
-game.start();

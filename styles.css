@@ -8,7 +8,14 @@
     height: 100vh;
     width: 100vw;
     display: grid;
+    grid-template: max-content 1fr / 1fr minmax(max-content, 5fr) 1fr;
+    padding: 30px;
+}
+
+.contentWrapper {
+    display: grid;
     grid-template-rows: 150px 1fr;
+    grid-area: 1/2/2/3;
 }
 
 .header {
@@ -18,7 +25,9 @@
 .content {
     background-color: green;
     display: grid;
+    grid-template: min-content 1fr 1fr/ 1fr min-content 1fr;
     place-items: center ;
+    padding: 20px;
 }
 
 .gameBoard {
@@ -37,5 +46,15 @@
     cursor: pointer;
 }
 
+.playerSel {
+    display: grid;
+}
 
+.buttons {
+    grid-area: 2/2/3/3;
+}
 
+.winner {
+    background-color: rgb(170, 170, 250);
+    grid-area: 3/2/4/3;
+}
