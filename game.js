@@ -1,7 +1,8 @@
-const player = (mark, playerName) => {
+const player = (mark, playerName, isBot) => {
     const name = playerName;
     const marker = mark;
-    return {name, marker};
+    const isBot = isBot;
+    return {name, marker, isBot};
 };
 
 const gameBoard = (() => {
@@ -178,6 +179,8 @@ const game = (() => {
 
     const startBtn = document.getElementById("startBtn");
     startBtn.addEventListener("click", () => start());
+
+    const isOBot = document.getElementById("isOBot");
 
     const nameInputX = document.getElementById("playerXName");
     const nameInputO = document.getElementById("playerOName");
