@@ -1,7 +1,7 @@
-const player = (mark, playerName, isBot) => {
+const player = (mark, playerName, isBotO) => {
     const name = playerName;
     const marker = mark;
-    const isBot = isBot;
+    const isBot = isBotO;
     return {name, marker, isBot};
 };
 
@@ -80,43 +80,52 @@ const gameBoard = (() => {
 })();
 
 const game = (() => {
+
     let currentTurn = "x";
     let playerX;
     let playerO;
     
     const start = () => { //starts the game, heart of the code 
-        reset();
-        initPlayerNames();
 
-        let inputField = document.querySelectorAll(".gameInput");
-        
-        //adds event listeners to each field
-        inputField.forEach((field, index) => {
+        if (checkForBot()) { //player vs ai
+
+            console.log("It's bot time!")
+
+        } else { //player vs player
+            reset();
+            initPlayerNames();
+
+            let inputField = document.querySelectorAll(".gameInput");
             
-            field.addEventListener("click", function eventListener() {
-                //checks who's turn it is and if the field is taken, if not places the current's player's marker
-                if (currentTurn === "x" && field.textContent === "") {
-                    gameBoard.placeX(index);
-                    field.textContent = "X";
-                    currentTurn = "o";
-                    // console.log("placed x");
-                    gameBoard.checkForWin();
-                }
-                else if (currentTurn === "o" && field.textContent === "") {
-                    gameBoard.placeO(index);
-                    field.textContent = "O";
-                    currentTurn = "x";
-                    // console.log("placed o");
-                    gameBoard.checkForWin();
-                };
+            //adds event listeners to each field
+            inputField.forEach((field, index) => {
+                
+                field.addEventListener("click", function eventListener() {
+                    //checks who's turn it is and if the field is taken, if not places the current's player's marker
+                    if (currentTurn === "x" && field.textContent === "") {
+                        gameBoard.placeX(index);
+                        field.textContent = "X";
+                        currentTurn = "o";
+                        // console.log("placed x");
+                        gameBoard.checkForWin();
+                    }
+                    else if (currentTurn === "o" && field.textContent === "") {
+                        gameBoard.placeO(index);
+                        field.textContent = "O";
+                        currentTurn = "x";
+                        // console.log("placed o");
+                        gameBoard.checkForWin();
+                    };
+                });
+                
             });
-            
-        });
+        };
     };
     
     const end = (winningMarker,isGameWon) => {  //ends game, initiates output of result
         nameInputO.disabled = false;
         nameInputX.disabled = false;
+        isOBot.disabled = false;
 
         if (isGameWon) {
             const gameBoardDOM = document.getElementById("gameBoard");
@@ -146,6 +155,7 @@ const game = (() => {
 
         nameInputO.disabled = false;
         nameInputX.disabled = false; 
+        isOBot.disabled = false;
     };
 
     const initPlayerNames = () => { //saves playernames
@@ -171,6 +181,11 @@ const game = (() => {
 
         nameInputX.disabled = true; //disables input for the time of the game
         nameInputO.disabled = true;
+        isOBot.disabled = true;
+    };
+
+    const checkForBot = () => {
+        return isOBot.checked;
     };
 
     //buttons, output and inputs
