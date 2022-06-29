@@ -84,8 +84,8 @@ const game = (() => {
     let playerO;
     
     const start = () => { //starts the game, heart of the code 
-        initPlayerNames();
         reset();
+        initPlayerNames();
 
         let inputField = document.querySelectorAll(".gameInput");
         
@@ -96,14 +96,14 @@ const game = (() => {
                 //checks who's turn it is and if the field is taken, if not places the current's player's marker
                 if (currentTurn === "x" && field.textContent === "") {
                     gameBoard.placeX(index);
-                    field.textContent = "x";
+                    field.textContent = "X";
                     currentTurn = "o";
                     // console.log("placed x");
                     gameBoard.checkForWin();
                 }
                 else if (currentTurn === "o" && field.textContent === "") {
                     gameBoard.placeO(index);
-                    field.textContent = "o";
+                    field.textContent = "O";
                     currentTurn = "x";
                     // console.log("placed o");
                     gameBoard.checkForWin();
@@ -142,6 +142,9 @@ const game = (() => {
         currentTurn = "x";
         gameBoard.resetGameBoard();
         winnerOutput.textContent = "";
+
+        nameInputO.disabled = false;
+        nameInputX.disabled = false; 
     };
 
     const initPlayerNames = () => { //saves playernames
@@ -171,7 +174,7 @@ const game = (() => {
 
     //buttons, output and inputs
     const resetBtn = document.getElementById("resetBtn");
-    resetBtn.addEventListener("click", () => start());
+    resetBtn.addEventListener("click", () => reset());
 
     const startBtn = document.getElementById("startBtn");
     startBtn.addEventListener("click", () => start());
