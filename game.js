@@ -27,10 +27,13 @@ const gameBoard = (() => {
         currentGameBoard[pos] = "o";
     };
 
+    const logGame = () => {console.log(currentGameBoard)};
+
     const resetGameBoard = () => {currentGameBoard = ["e","e","e","e","e","e","e","e","e"]};
 
     const checkForWin = () => { //checks if one player won the game or the game ties and triggers game.end if successful
         let isGameWon = false;
+        let stopAi = false;
 
         for (const x in winningPatterns) { //loops through possible winning patterns and checks currentGameBoard for them
             if (    
@@ -40,9 +43,11 @@ const gameBoard = (() => {
                 ) {
                     if (currentGameBoard[winningPatterns[x][0]] === "x") {
                         isGameWon = true;
+                        stopAi = true;
                         game.end("x", true);
                     } else if (currentGameBoard[winningPatterns[x][0]] === "o") {
                         isGameWon = true;
+                        stopAi = true;
                         game.end("o", true);
                     }
                     break;
@@ -50,7 +55,9 @@ const gameBoard = (() => {
             };
         if (!isGameWon && checkForTie()) {
             game.end("e", false);
+            stopAi = true;
         };
+        return stopAi;
     };
 
     const checkForTie = () => { //checks the game for a tie position
@@ -71,11 +78,25 @@ const gameBoard = (() => {
         };
     };
 
+    const aiCheckForFreeField = (num) => {
+        let returnThis;
+        if (currentGameBoard[num] === "e") {
+            console.log("free")
+            returnThis = true;
+        } else {
+            console.log("not free")
+            returnThis = false;
+        };
+        return returnThis;
+    };
+
     return {
         placeX,
         placeO,
         resetGameBoard,
         checkForWin,
+        aiCheckForFreeField,
+        logGame,
     };
 })();
 
@@ -86,21 +107,32 @@ const game = (() => {
     let playerO;
     
     const start = () => { //starts the game, heart of the code 
+        reset();
+        initPlayerNames();
+
+        let inputField = document.querySelectorAll(".gameInput");
 
         if (checkForBot()) { //player vs ai
 
-            console.log("It's bot time!")
+            console.log("It's bot time!");
+            
+            inputField.forEach((field, index) => {
+                
+                field.addEventListener("click", () => {
+                    gameBoard.placeX(index);
+                    field.textContent = "X";
+                    gameBoard.checkForWin();
+                    aiPlay();
+                    gameBoard.checkForWin();
+                });
+            });
 
         } else { //player vs player
-            reset();
-            initPlayerNames();
 
-            let inputField = document.querySelectorAll(".gameInput");
-            
             //adds event listeners to each field
             inputField.forEach((field, index) => {
                 
-                field.addEventListener("click", function eventListener() {
+                field.addEventListener("click", () => {
                     //checks who's turn it is and if the field is taken, if not places the current's player's marker
                     if (currentTurn === "x" && field.textContent === "") {
                         gameBoard.placeX(index);
@@ -182,6 +214,30 @@ const game = (() => {
         nameInputX.disabled = true; //disables input for the time of the game
         nameInputO.disabled = true;
         isOBot.disabled = true;
+    };
+
+    const aiPlay = () => {
+        let randomNumber = Math.floor((Math.random())*9);
+        if (!(gameBoard.checkForWin())) {
+            if (gameBoard.aiCheckForFreeField(randomNumber)) {
+                console.log("works");
+                gameBoard.placeO(randomNumber);
+                switch(randomNumber) {
+                    case 0: document.getElementById("tl").textContent = "O"; break;
+                    case 1: document.getElementById("tm").textContent = "O"; break;
+                    case 2: document.getElementById("tr").textContent = "O"; break;
+                    case 3: document.getElementById("ml").textContent = "O"; break;
+                    case 4: document.getElementById("mm").textContent = "O"; break;
+                    case 5: document.getElementById("mr").textContent = "O"; break;
+                    case 6: document.getElementById("bl").textContent = "O"; break;
+                    case 7: document.getElementById("bm").textContent = "O"; break;
+                    case 8: document.getElementById("br").textContent = "O"; break;
+                }
+            } else {
+                console.log("doesnt work")
+                aiPlay();
+            };
+        };
     };
 
     const checkForBot = () => {
