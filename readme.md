@@ -1,3 +1,2 @@
 To-Do:
-    - UI/Design
-    (- add AI)  
+    - add AI (porbably needs restructering of whole code, every move -> ai branch)
